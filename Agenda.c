@@ -29,7 +29,8 @@ int main (void){
     switch (opcao) {
       case 1:
         contadorInserir++;
-        inserirContato(&ptr_Contato,contadorInserir);
+        ///ptr_contato precisa se atualizar depois de sofrer uma inserção, pois realloc muda endereço
+        ptr_Contato = inserirContato(ptr_Contato,contadorInserir);
 
 
 
@@ -47,6 +48,7 @@ int main (void){
       break;
 
       case 4:
+        insertionSort(&ptr_Contato[0],contadorInserir);
 
 
 
@@ -54,7 +56,7 @@ int main (void){
       break;
 
       case 5:
-      mostrarContato(&ptr_Contato,contadorInserir);
+        mostrarContato(ptr_Contato,contadorInserir);
 
 
       break;
