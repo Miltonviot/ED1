@@ -1,48 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdio_ext.h>
 
 typedef struct _lista {
 	int info;
 	struct _lista * prox;
 }TpLista;
 
+TpLista* inseriIni(TpLista* l, int i);
+TpLista* inicializa();
+TpLista *exclui(TpLista * l, int e);
+void imprime(TpLista* l);
+
+TpLista *inicializa(){
+	return NULL;
+}
+
+TpLista *inseriIni(TpLista *l, int n){
+	TpLista *novo = (TpLista *) malloc(sizeof(TpLista));
+	
+	if (novo == NULL){
+		return NULL;
+		
+	}
+
+	novo->info = n;
+	novo->prox = l;
+	return novo;
+}
 
 void imprime(TpLista* l){
 	TpLista* p;
 	for(p = l; p != NULL; p = p->prox){
-    printf("%d\n",p->info );
+		printf("Informação = %d\n", p->info);
 	}
 }
-/* função de inicialização */
-TpLista* inicializa(){
-	return NULL;
-}
-
-/* função de inserção no iníco da lista */
-TpLista* insereini(TpLista* l, int e){
-	TpLista* novo = (TpLista *) malloc(sizeof(TpLista));
-	novo->info = e;
-	novo->prox = l;
-	return novo;
-
-}
-
-/* Inicializa e insere elementos no início da lista */
-
-
-/* Protótipo das Funções */
-
-TpLista* insereini(TpLista* l, int i);
-TpLista* inicializa();
-
-
-
-/* função para percorrer lista. Imprime os valores dos elementos */
-
-
-/* função evazia: retorna 1 se vazia ou 0 se não vazia */
 
 int evazia(TpLista* l){
 	if(l == NULL){
@@ -52,7 +43,6 @@ int evazia(TpLista* l){
 	}
 }
 
-/* função busca: retorna o ponteiro para o elemento ou NULL */
 
 TpLista* busca(TpLista* l, int e){
 	TpLista* p;
@@ -63,73 +53,107 @@ TpLista* busca(TpLista* l, int e){
 	}
 	return NULL; //O elemento não está na lista
 }
-/* função inclui: retorna o ponteiro para o elemento ou NULL */
-TpLista * inclui(TpLista * l, int e){
 
-TpLista* novo = (TpLista *) malloc(sizeof(TpLista));
-    TpLista * anterior = NULL; // ponteiro para o elemento anterior
-  	TpLista * p = l; // ponteiro para percorrer a lista
-
-    	/* procura elemento na lista e guarda o anterior */
-    	while(p != NULL && p->info < e){
-    		anterior = p;
-    		p = p->prox;
-    	}
-
-    	/* verifica se achou elemento */
-    	if(p==NULL){
-    		return l; // não achou o elemento, retorna a lista original
-    	}
-
-      novo->info = e;
-      if(anterior->prox == NULL){
-        anterior->prox = novo;
-        novo->prox=NULL;
-        return l;
-      }
-    novo->prox = anterior->prox;
-    anterior->prox = novo;
-    return l;
-
-}
-
-/* função exclui: retorna o ponteiro para o elemento ou NULL */
-
-TpLista * exclui(TpLista * l, int e){
+TpLista *exclui(TpLista * l, int e){
 	TpLista * anterior = NULL; // ponteiro para o elemento anterior
 	TpLista * p = l; // ponteiro para percorrer a lista
-
+	
 	/* procura elemento na lista e guarda o anterior */
 	while(p != NULL && p->info != e){
 		anterior = p;
 		p = p->prox;
 	}
-
+	
 	/* verifica se achou elemento */
 	if(p == NULL){
 		return l; // não achou o elemento, retorna a lista original
 	}
-
-  /* retira elemento */
+	/* retira elemento */
 	if(anterior == NULL){ // então retirar o primeiro elemento
 		l = p->prox;
 	}else{ // retira elemento do meio da lista
-		anterior->prox = p->prox;
+		anterior->prox = p->prox; 
 	}
 	free(p);
 	return l;
-} // fim de Lista * exclui...
+}
+
+
+TpLista *insereOrdenado(TpLista * l, int e){
+	TpLista * anterior = NULL, *novo; // ponteiro para o elemento anterior
+	TpLista * p = l; // ponteiro para percorrer a lista
+	novo = (TpLista *)malloc(sizeof(TpLista));
+
+	if (novo == NULL) return l;
+
+	novo->info = e;
+
+	/* procura elemento na lista e guarda o anterior */
+
+	while(p != NULL && p->info < e){
+		anterior = p;
+		p = p->prox;
+	}
+	
+	//Seja o último elemento
+	if(p == NULL){
+		anterior->prox = novo;
+		novo->prox = NULL;
+		return l;
+	}
+	
+	//Primeiro elemento
+	if(anterior == NULL){
+		novo->prox = p;
+		l = novo;
+	}else{ //insere no meio
+		novo->prox = p;
+		anterior->prox = novo; 
+	}
+	return l;
+} 
 
 
 /* Função principal */
 int main(){
+
 	TpLista* l;	/* declara uma lista não inicializada */
 	l = inicializa(); /* inicializa lista como vazia */
-  l = insereini(l, 25);
-  l = insereini(l, 10); /* insere o elemento 10 */
-  l = inclui(l, 15);
+
+	l = inseriIni(l, 0);
+  	int operador=0;
+  	int parametro;
+  	
+  	while(operador !=5 ){
+
+  	puts("==========================");
+  	puts("= Selecione a opção      =");
+  	puts("= 1 para inserção        =");
+  	puts("= 2 para mostrar         =");
+  	puts("= 5 para sair            =");
+  	puts("==========================");
+	scanf("%d",&operador);
+
+  		switch (operador){
+  		
+  		case 1:
+  		
+  			puts("Digite um numero para inserir ordenado na lista");
+  			scanf("%d",&parametro);
+ 			l = insereOrdenado(l,parametro);
+  		break;
+  	
+  		case 2:
+  			puts("aqui");
+  			imprime(l);
+  		break;
+
+  		}
+  		
+  	}
+  	
    /* insere o elemento 25 */
-  imprime(l);
+  
 
 return 0;
 }
